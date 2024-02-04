@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"os"
 )
@@ -13,9 +12,17 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	defer dbConnection.conn.Close(context.Background())
-
-	//server connection
+	
+	// creating db tables
+	if err := dbConnection.createTables();err!=nil{
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	
+	// server connection
 	server := NewApiServer(":3000", *dbConnection)
 	server.runServer()
+
+
+	defer dbConnection.conn.Close()
 }

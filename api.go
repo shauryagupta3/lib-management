@@ -52,4 +52,5 @@ func (s *API) runServer() {
 
 func (s *API) handleApi(r chi.Router) {
 	r.Route("/member", s.handleMember)
+	r.Route("/book", s.handleBooks)
 }
