@@ -4,12 +4,26 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi/v5"
 )
 
 func (s *API) handleBooks(r chi.Router) {
 	r.Post("/", makeHttpFunc(s.handleCreateBook))
+	r.Get("/{id}",makeHttpFunc(s.handleGetBookByID))
+}
+
+func (s *API) handleGetBookByID(w http.ResponseWriter, r *http.Request) error {
+	id_of_book := chi.URLParam(r, "id")
+	i, _ := strconv.Atoi(id_of_book)
+
+	a, err := s.db.getBookById(i)
+	if err != nil {
+		return err
+	}
+	writeJson(w, r, a, http.StatusOK)
+	return nil
 }
 
 func (s *API) handleCreateBook(w http.ResponseWriter, r *http.Request) error {
@@ -38,17 +52,18 @@ func (s *dbPgx) createBooksTable() error {
 func (s *dbPgx) getBookById(id int) (*Book, error) {
 	var a Book
 
-	err := s.conn.QueryRow(context.Background(), "select id,title,year,genre from books where id=$1", id).Scan(&a.Id, &a.Title, &a.Year, &a.Genre)
+	err := s.conn.QueryRow(context.Background(), "select id,title,release_year,genre from books where id=$1", id).Scan(&a.Id, &a.Title, &a.Year, &a.Genre)
 	if err != nil {
 		return nil, err
 	}
 
+	s.getAuthorsByBookID(&a)
 	return &a, err
 }
 
 func (s *dbPgx) createBook(a *Book) error {
 
-	_, err := s.conn.Query(context.Background(), "insert into books(title,release_year,genre) values ($1,$2,$3)", a.Title, a.Year, a.Genre)
+	err := s.conn.QueryRow(context.Background(), "insert into books(title,release_year,genre) values ($1,$2,$3) returning id", a.Title, a.Year, a.Genre).Scan(&a.Id)
 	if err != nil {
 		return err
 	}
@@ -59,5 +74,6 @@ func (s *dbPgx) createBook(a *Book) error {
 		}
 	}
 
+	s.linkBookToAuthors(a)
 	return nil
 }

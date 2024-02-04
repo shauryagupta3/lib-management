@@ -36,5 +36,8 @@ func (s *dbPgx) createTables() error {
 	if err := s.createAuthorsTable(); err != nil {
 		return err
 	}
+	if err := s.createLinkBooksAuthorTable(); err != nil {
+		return err
+	}
 	return nil
 }

@@ -31,13 +31,11 @@ func (s *API) handleCreateMember(w http.ResponseWriter, r *http.Request) error {
 	if err := json.NewDecoder(r.Body).Decode(&m); err != nil {
 		return err
 	}
-	fmt.Println("got member")
 	err := s.db.createMemeber(&m)
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
-	fmt.Println("created member")
 	writeJson(w, r, m, http.StatusOK)
 	return nil
 }
