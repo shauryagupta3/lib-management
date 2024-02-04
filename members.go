@@ -43,7 +43,7 @@ func (s *API) handleCreateMember(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (s *dbPgx) createMembersTable() error {
-	_, err := s.conn.Query(context.Background(), "create table if not exists members(id serial primary key, full_name varchar(255) not null, phone_number char(10) not null, joined_at date default CURRENT_DATE, expires_at date default CURRENT_DATE+365, current_status varchar(10) default 'active')")
+	_, err := s.conn.Query(context.Background(), "create table if not exists members(id serial primary key, full_name varchar(255) not null, phone_number char(10) not null unique, joined_at date default CURRENT_DATE, expires_at date default CURRENT_DATE+365, current_status varchar(10) default 'active')")
 	if err != nil {
 		return err
 	}

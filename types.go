@@ -18,5 +18,4 @@ type Book struct {
 type Author struct {
 	Id   int    `json:"id"`
 	Name string `json:"name"`
-	DOB  string `json:"dob"`
 }

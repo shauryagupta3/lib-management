@@ -28,7 +28,7 @@ func (s *API) handleCreateBook(w http.ResponseWriter, r *http.Request) error {
 func getBook(w http.ResponseWriter, r *http.Request) error { return nil }
 
 func (s *dbPgx) createBooksTable() error {
-	_, err := s.conn.Query(context.Background(), "create table if not exists books(id serial primary key, title varchar(255) not null, release_year int not null, genre varchar(255))")
+	_, err := s.conn.Query(context.Background(), "create table if not exists books(id serial primary key, title varchar(255) not null unique, release_year int not null, genre varchar(255))")
 	if err != nil {
 		return err
 	}
