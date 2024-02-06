@@ -21,6 +21,15 @@ func createAuthor(a *types.Author) error {
 	return nil
 }
 
+func getAuthorByID(id int) (*types.Author, error) {
+	var a types.Author
+	err := dbConn.QueryRow(context.Background(), "select id,full_name from authors where id=$1", id).Scan(&a.Id, &a.Name)
+	if err != nil {
+		return nil, err
+	}
+	return &a, nil
+}
+
 func createAuthorIfNotExists(a *types.Author) error {
 
 	err := getAuthorByName(a)

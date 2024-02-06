@@ -20,6 +20,12 @@ func main() {
 		log.Fatal(err)
 	}
 
+//	err = db.DropTables() // drop tables
+	err = db.CreateTables() // create new tables
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	server := api.NewServer(":3000")
 
 	fmt.Println("server starting at :3000")

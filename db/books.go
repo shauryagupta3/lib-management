@@ -19,11 +19,17 @@ func GetBook(id int) (*types.Book, error) {
 }
 
 func CreateBook(a *types.Book) error {
+
+	err := dbConn.QueryRow(context.Background(), "insert into books(title,release_year,genre) values($1,$2,$3) returning id", a.Title, a.Year, a.Genre).Scan(&a.Id)
+	if err != nil {
+		return err
+	}
 	for index := range a.Authors {
-		err:=createAuthorIfNotExists(&a.Authors[index])
-		if err!=nil {
+		err := createAuthorIfNotExists(&a.Authors[index])
+		if err != nil {
 			return err
 		}
+		LinkBookToAuthor(a.Authors[index].Id, a.Id)
 	}
 	return nil
 }
