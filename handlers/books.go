@@ -12,7 +12,8 @@ import (
 
 func HandleBook(r chi.Router) {
 	r.Post("/", makeHttpFunc(createBook))
-	r.Get("/{id}", makeHttpFunc(getBook))
+	r.Get("/author/{id}", makeHttpFunc(HandleGetBookByAuthorID))
+	r.Get("/{id}", makeHttpFunc(getBookByID))
 }
 
 func createBook(w http.ResponseWriter, r *http.Request) error {
@@ -28,7 +29,7 @@ func createBook(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func getBook(w http.ResponseWriter, r *http.Request) error {
+func getBookByID(w http.ResponseWriter, r *http.Request) error {
 	id := chi.URLParam(r, "id")
 	i, err := strconv.Atoi(id)
 	if err != nil {
@@ -40,5 +41,22 @@ func getBook(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	writeJson(w, http.StatusOK, book)
+	return nil
+}
+
+func HandleGetBookByAuthorID(w http.ResponseWriter, r *http.Request) error {
+	
+	id := chi.URLParam(r, "id")
+	i, err := strconv.Atoi(id)
+	if err != nil {
+		return err
+	}
+
+	books, err := db.GetBooksByAuthorID(i)
+	if err != nil {
+		return err
+	}
+	writeJson(w, http.StatusOK, books)
+
 	return nil
 }
