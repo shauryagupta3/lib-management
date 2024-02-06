@@ -1,7 +1,13 @@
-package main
+package types
+
+import "github.com/jackc/pgx/v5/pgxpool"
+
+type DB struct {
+	PostgresConnection *pgxpool.Pool
+}
 
 type Member struct {
-	Id     int    `json:"id"`
+	ID     int    `json:"id"`
 	Name   string `json:"name"`
 	Phone  string `json:"phone"`
 	Status string `json:"status"`
@@ -16,6 +22,6 @@ type Book struct {
 }
 
 type Author struct {
-	Id   int    `json:"id"`
+	Id int `json:"id"`
 	Name string `json:"name"`
 }

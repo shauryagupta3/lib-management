@@ -2,27 +2,26 @@ package main
 
 import (
 	"fmt"
+	"libraryManagement/api"
+	"libraryManagement/db"
+	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	// postgres db connection
-	dbConnection, err := initPostgres()
+	if err := godotenv.Load(); err != nil {
+		log.Fatal(err)
+	}
+
+	err := db.ConnectPostgres(os.Getenv("DB_URL"))
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
-	
-	// creating db tables
-	if err := dbConnection.createTables();err!=nil{
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	
-	// server connection
-	server := NewApiServer(":3000", *dbConnection)
-	server.runServer()
 
+	server := api.NewServer(":3000")
 
-	defer dbConnection.conn.Close()
+	fmt.Println("server starting at :3000")
+	server.RunServer()
 }
