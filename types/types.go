@@ -1,16 +1,19 @@
 package types
 
-import "github.com/jackc/pgx/v5/pgxpool"
+import (
+	"github.com/jackc/pgx/v5/pgxpool"
+)
 
 type DB struct {
 	PostgresConnection *pgxpool.Pool
 }
 
 type Member struct {
-	ID     int    `json:"id"`
-	Name   string `json:"name"`
-	Phone  string `json:"phone"`
-	Status string `json:"status"`
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
+	Phone    string `json:"phone"`
+	Status   string `json:"status"`
+	JoinedAt string `json:"joinedAt"`
 }
 
 type Book struct {
@@ -22,6 +25,13 @@ type Book struct {
 }
 
 type Author struct {
-	Id int `json:"id"`
+	Id   int    `json:"id"`
 	Name string `json:"name"`
+}
+
+type User struct {
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	CreatedAt string `json:"createdAt"`
+	Level     int    `json:"level"`
 }

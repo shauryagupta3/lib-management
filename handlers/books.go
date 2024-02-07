@@ -45,7 +45,7 @@ func getBookByID(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleGetBookByAuthorID(w http.ResponseWriter, r *http.Request) error {
-	
+
 	id := chi.URLParam(r, "id")
 	i, err := strconv.Atoi(id)
 	if err != nil {
@@ -60,3 +60,4 @@ func HandleGetBookByAuthorID(w http.ResponseWriter, r *http.Request) error {
 
 	return nil
 }
+
