@@ -34,3 +34,9 @@ type User struct {
 	Password  string `json:"password"`
 	CreatedAt string `json:"createdAt"`
 }
+
+type Instance struct {
+	ID        int `json:"id"`
+	BookId    int    `json:"book_id"`
+	Available bool   `json:"available"`
+}

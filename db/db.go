@@ -14,6 +14,7 @@ const createAuthorsQuery = "create table if not exists authors(id serial primary
 const createBooksQuery = "create table if not exists books(id serial primary key, title varchar(255) not null, release_year int not null, genre varchar(255))"
 const createUsersQuery = "create table if not exists users(id serial primary key, email varchar(255) not null, password varchar(255) not null, created_at date default CURRENT_DATE)"
 const createMembersQuery = "create table if not exists members(id serial primary key, full_name varchar(255) not null, phone_number char(10) not null, joined_at date default CURRENT_DATE, expires_at date default CURRENT_DATE+365, current_status varchar(10) default 'active')"
+const createInstancesQuery = "create table if not exists instances(id serial primary key, book_id int references books (id) on update cascade, available bool not null default true)"
 
 func ConnectPostgres(url string) error {
 	conn, err := pgxpool.New(context.Background(), url)
@@ -30,6 +31,7 @@ func CreateTables() error {
 		createAuthorsQuery,
 		createMembersQuery,
 		createUsersQuery,
+		createInstancesQuery,
 		createLinkBooksToAuthorsQuery,
 	}
 
@@ -48,6 +50,7 @@ func DropTables() error {
 		"authors",
 		"members",
 		"users",
+		"instances",
 		"linkbookstoauthors",
 	}
 
