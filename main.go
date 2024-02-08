@@ -20,7 +20,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-//	err = db.DropTables() // drop tables
+	err = db.DropTables() // drop tables
 	err = db.CreateTables() // create new tables
 	if err != nil {
 		log.Fatal(err)
