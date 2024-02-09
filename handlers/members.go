@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"encoding/json"
 	"libraryManagement/db"
+	"libraryManagement/types"
 	"net/http"
 	"strconv"
 
@@ -9,10 +11,8 @@ import (
 )
 
 func HandleMember(r chi.Router) {
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		writeJson(w, http.StatusOK, "hello world")
-	})
 	r.Get("/{id}", makeHttpFunc(getMember))
+	r.Post("/", makeHttpFunc(PostMember))
 }
 
 func getMember(w http.ResponseWriter, r *http.Request) error {
@@ -27,5 +27,20 @@ func getMember(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	writeJson(w, http.StatusOK, member)
+	return nil
+}
+
+func PostMember(w http.ResponseWriter, r *http.Request) error {
+	var a *types.Member
+
+	if err := json.NewDecoder(r.Body).Decode(&a); err != nil {
+		return err
+	}
+
+	if err := db.CreateNewMember(a); err != nil {
+		return err
+	}
+
+	writeJson(w, http.StatusOK, a)
 	return nil
 }

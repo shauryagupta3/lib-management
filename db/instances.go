@@ -18,3 +18,10 @@ func DeleteInstance(a *types.Instance) error {
 	}
 	return nil
 }
+
+func UpdateAvailableStatus(id int) error {
+	if _, err := dbConn.Exec(context.Background(), "update instances set available = not available where id=$1", id); err != nil {
+		return err
+	}
+	return nil
+}

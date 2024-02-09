@@ -29,6 +29,7 @@ func (s *API) RunServer() error {
 		r.Route("/member", handlers.HandleMember)
 		r.Route("/user", handlers.HandleUsers)
 		r.Route("/instance", handlers.HandleInstances)
+		r.Route("/loan",handlers.HandleLoans)
 	})
 
 	return http.ListenAndServe(s.listenAddress, r)

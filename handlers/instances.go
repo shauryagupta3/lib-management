@@ -40,3 +40,4 @@ func DeleteInstance(w http.ResponseWriter, r *http.Request) error {
 
 	return nil
 }
+
