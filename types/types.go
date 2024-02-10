@@ -51,4 +51,5 @@ type Loan struct {
 	IssuedAt   time.Time `json:"issued_at"`
 	ReturnedAt time.Time `json:"returned_at"`
 	Pending    bool      `json:"pending"`
+	Fine       int       `json:"fine"`
 }
